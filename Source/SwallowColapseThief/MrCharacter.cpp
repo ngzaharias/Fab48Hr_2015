@@ -24,6 +24,11 @@ void AMrCharacter::Tick( float DeltaTime )
 {
 	Super::Tick( DeltaTime );
 
+	const float deltaX = InputComponent->GetAxisValue(TEXT("Movement_X"));
+	CharacterMovement->AddInputVector(FVector(0, 1, 0) * deltaX);
+
+	const float deltaY = InputComponent->GetAxisValue(TEXT("MOVEMENT_Y"));
+	CharacterMovement->AddInputVector(FVector(1, 0, 0) * deltaY);
 }
 
 // Called to bind functionality to input
