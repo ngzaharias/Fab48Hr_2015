@@ -12,8 +12,8 @@ UCLASS()
 class SWALLOWCOLAPSETHIEF_API ASwallowColapseThiefGameMode : public AGameMode
 {
 	GENERATED_BODY()
-	
-	
+
+	ASwallowColapseThiefGameMode();
 	
 	
 };

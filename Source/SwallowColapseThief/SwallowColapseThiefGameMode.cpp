@@ -3,6 +3,8 @@
 #include "SwallowColapseThief.h"
 #include "SwallowColapseThiefGameMode.h"
 
+#include "LevelManager.h"
 
-
-
+ASwallowColapseThiefGameMode::ASwallowColapseThiefGameMode()
+{
+}
