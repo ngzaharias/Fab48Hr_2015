@@ -3,6 +3,8 @@
 #include "SwallowColapseThief.h"
 #include "SwallowColapseThiefGameMode.h"
 
+#include "MrCharacter.h"
+
 ASwallowColapseThiefGameMode::ASwallowColapseThiefGameMode()
 {
 

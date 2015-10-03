@@ -15,7 +15,6 @@ AMrCharacter::AMrCharacter()
 void AMrCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
@@ -23,6 +22,11 @@ void AMrCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	m_isCharging = GetWorld()->GetTimerManager().GetTimerRemaining(m_chargeTimeHandle) > 0.0f;
+	if (m_isCharging)
+	{
+		ChargeTick();
+	}
 }
 
 // Called to bind functionality to input
@@ -104,16 +108,26 @@ FRotator AMrCharacter::CalculateRotation(float deltaX, float deltaY)
 
 void AMrCharacter::ChargeStart()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, "ChargeStart");
+	UCharacterMovementComponent* characterMovement = GetCharacterMovement();
 
-	FVector directionCurrent = GetController()->GetControlRotation().Vector();
-	GetCharacterMovement()->AddImpulse(directionCurrent * m_chargeForce);
+	if (GetWorld()->GetTimerManager().GetTimerRemaining(m_chargeCooldownHandle) <= 0.0f)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, "ChargeStart");
 
-	GetWorld()->GetTimerManager().SetTimer(m_chargeTimeHandle, this, &AMrCharacter::ChargeFinish, m_chargeTime, false);
-	GetWorld()->GetTimerManager().SetTimer(m_chargeCooldownHandle, m_chargeCooldown, false);
+		FVector directionCurrent = GetController()->GetControlRotation().Vector();
+		characterMovement->AddImpulse(directionCurrent * m_chargeForce);
+		characterMovement->MovementMode = EMovementMode::MOVE_Flying;
+
+		GetWorld()->GetTimerManager().SetTimer(m_chargeTimeHandle, this, &AMrCharacter::ChargeFinish, m_chargeTime, false);
+		GetWorld()->GetTimerManager().SetTimer(m_chargeCooldownHandle, m_chargeCooldown, false);
+	}
 }
 
 void AMrCharacter::ChargeFinish()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, "ChargeFinish");
+
+	GetWorld()->GetTimerManager().ClearTimer(m_chargeTimeHandle);
+
+	GetCharacterMovement()->MovementMode = EMovementMode::MOVE_Walking;
 }
