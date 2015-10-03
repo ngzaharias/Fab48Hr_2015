@@ -60,9 +60,20 @@ float ALevelManager::GetDistanceFromCenter(AActor* actor)
 
 void ALevelManager::DestroyRandomChunk()
 {
+	//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, "ALevelManager::DestroyRandomChunk");
+	int32 size = activeChunks.Num();
+	if (size == 0)
+		return;
+
+	int32 idx = FMath::RandRange(0, size - 1);
+	int32 lvlIdx = activeChunks[idx];
+	ExplodePiece(levelChunks[lvlIdx]);
+	activeChunks.Remove(lvlIdx);
+	
 }
 
 void ALevelManager::TrackLevelPiece(AActor* actor)
 {
 	levelChunks.Add(actor);// [GetDistanceFromCenter(actor)] = actor;
+	activeChunks.Add(levelChunks.Num()-1);
 }

@@ -41,8 +41,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "LevelManager")
 		int32 height;
+			  
+	UFUNCTION(BlueprintImplementableEvent, Category = "LevelManager")
+		void ExplodePiece(AActor* actor);
 private:
 	//typedef TMap<float, AActor*> ActorMap;
 	typedef TArray<AActor*> ActorArray;
 	ActorArray levelChunks;
+	TArray<int32> activeChunks;
 };
