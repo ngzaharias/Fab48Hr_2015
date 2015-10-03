@@ -21,4 +21,28 @@ public:
 	
 	// Called every frame
 	virtual void Tick( float DeltaSeconds ) override;
+
+	//UFUNCTION(BlueprintCallable, Category = "LevelManager")
+	//	void JordanTestFunc(){}
+	UFUNCTION(BlueprintCallable, Category = "LevelManager")
+		FVector2D GetLevelCenter();
+	
+	UFUNCTION(BlueprintCallable, Category = "LevelManager")
+		float GetDistanceFromCenter(AActor* actor);
+
+	UFUNCTION(BlueprintCallable, Category = "LevelManager")
+		void DestroyRandomChunk();
+
+	UFUNCTION(BlueprintCallable, Category = "LevelManager")
+		void TrackLevelPiece(AActor* actor);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "LevelManager")
+		int32 width;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "LevelManager")
+		int32 height;
+private:
+	//typedef TMap<float, AActor*> ActorMap;
+	typedef TArray<AActor*> ActorArray;
+	ActorArray levelChunks;
 };
