@@ -33,10 +33,14 @@ public:
 
 	FRotator CalculateRotation(float deltaX, float deltaY);
 
+
 protected:
 	
 	void ChargeStart();
-	void ChargeFinish();
+	UFUNCTION(BlueprintImplementableEvent, Category = "Abilities")
+		void ChargeTick();
+	UFUNCTION(BlueprintCallable, Category = "Abilities")
+		void ChargeFinish();
 
 public:
 
@@ -52,6 +56,9 @@ public:
 		float m_chargeCooldown;
 
 protected:
+	UPROPERTY(BlueprintReadOnly, Category = "Abilities")
+		bool m_isCharging;
+
 	FTimerHandle m_chargeTimeHandle;
 	FTimerHandle m_chargeCooldownHandle;
 };
