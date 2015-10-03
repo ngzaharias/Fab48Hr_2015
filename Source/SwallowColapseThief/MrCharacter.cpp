@@ -35,6 +35,7 @@ void AMrCharacter::SetupPlayerInputComponent(class UInputComponent* InputCompone
 	Super::SetupPlayerInputComponent(InputComponent);
 	InputComponent->BindAction(TEXT("ActionBasic"), IE_Pressed, this, &AMrCharacter::ActionBasic);
 	InputComponent->BindAction(TEXT("ActionSpecial"), IE_Pressed, this, &AMrCharacter::ActionSpecial);
+	InputComponent->BindAction(TEXT("StartButton"), IE_Pressed, this, &AMrCharacter::ActionSpecial);
 	InputComponent->BindAxis(TEXT("Movement_X"), this, &AMrCharacter::Movement_X);
 	InputComponent->BindAxis(TEXT("Movement_Y"), this, &AMrCharacter::Movement_Y);
 	InputComponent->BindAxis(TEXT("Direction_X"), this, &AMrCharacter::Direction_X);
