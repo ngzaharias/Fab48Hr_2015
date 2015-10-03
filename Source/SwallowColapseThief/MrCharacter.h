@@ -23,7 +23,16 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
 
-	UFUNCTION(BlueprintCallable, Category = "MrCharacter")
-		virtual void TestFunction();
-	
+	virtual void ActionBasic();
+	virtual void ActionSpecial();
+
+	virtual void Movement_X(float value);
+	virtual void Movement_Y(float value);
+	virtual void Direction_X(float value);
+	virtual void Direction_Y(float value);
+
+	virtual float GetRotationYaw(float deltaX, float deltaY);
+
+protected:
+	float m_yaw;
 };
