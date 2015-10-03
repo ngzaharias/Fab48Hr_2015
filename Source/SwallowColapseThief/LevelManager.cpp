@@ -96,6 +96,17 @@ void ALevelManager::SortLevelChunks()
 	}
 }
 
+AActor* ALevelManager::GetValidLevelSeg()
+{
+	int32 size = activeChunks.Num();
+	if (size == 0)
+		return 0;
+
+	int32 idx = FMath::RandRange(0, size - 1);
+	int32 lvlIdx = activeChunks[idx];
+	return levelChunks[lvlIdx];
+}
+
 int32 ALevelManager::GetfurtherestIdx()
 {
 	float biggestDist = 0.0f;

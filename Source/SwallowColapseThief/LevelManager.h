@@ -39,6 +39,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "LevelManager")
 		void SortLevelChunks();
 
+	UFUNCTION(BlueprintCallable, Category = "LevelManager")
+		AActor* GetValidLevelSeg();
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "LevelManager")
 		int32 width;
 
