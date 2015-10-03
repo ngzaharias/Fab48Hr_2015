@@ -36,6 +36,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "LevelManager")
 		void TrackLevelPiece(AActor* actor);
 
+	UFUNCTION(BlueprintCallable, Category = "LevelManager")
+		void SortLevelChunks();
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "LevelManager")
 		int32 width;
 
@@ -44,9 +47,16 @@ public:
 			  
 	UFUNCTION(BlueprintImplementableEvent, Category = "LevelManager")
 		void ExplodePiece(AActor* actor);
+
+protected:
+	int32 GetfurtherestIdx();
+
+	//UFUNCTION(BlueprintImplementableEvent, Category = "LevelManager")
+	//	FVector (AActor* actor);
 private:
 	//typedef TMap<float, AActor*> ActorMap;
 	typedef TArray<AActor*> ActorArray;
 	ActorArray levelChunks;
 	TArray<int32> activeChunks;
+	TArray<int32> sortedActiveChunks;
 };
