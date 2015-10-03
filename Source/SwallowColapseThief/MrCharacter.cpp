@@ -22,6 +22,11 @@ void AMrCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	m_isCharging = GetWorld()->GetTimerManager().GetTimerRemaining(m_chargeTimeHandle) > 0.0f;
+	if (m_isCharging)
+	{
+		ChargeTick();
+	}
 }
 
 // Called to bind functionality to input
@@ -121,6 +126,8 @@ void AMrCharacter::ChargeStart()
 void AMrCharacter::ChargeFinish()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, "ChargeFinish");
+
+	GetWorld()->GetTimerManager().ClearTimer(m_chargeTimeHandle);
 
 	GetCharacterMovement()->MovementMode = EMovementMode::MOVE_Walking;
 }
