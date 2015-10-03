@@ -23,7 +23,6 @@ void AMrCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	
 }
 
 // Called to bind functionality to input
@@ -64,36 +63,43 @@ void AMrCharacter::Movement_Y(float value)
 
 void AMrCharacter::Direction_X(float value)
 {
+	//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, "Direction_X");
+
 	const float deltaY = InputComponent->GetAxisValue(TEXT("Direction_Y"));
 	FRotator rotation = CalculateRotation(value, deltaY);
 	GetController()->SetControlRotation(rotation);
 
-	//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, "Direction_X");
 }
 
 void AMrCharacter::Direction_Y(float value)
 {
+	//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, "Direction_Y");
+
 	const float deltaX = InputComponent->GetAxisValue(TEXT("Direction_X"));
 	FRotator rotation = CalculateRotation(deltaX, value);
 	GetController()->SetControlRotation(rotation);
 
-	//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, "Direction_Y");
 }
 
 FRotator AMrCharacter::CalculateRotation(float deltaX, float deltaY)
 {
+	const FRotator rotationCurrent = GetController()->GetControlRotation();
+	FRotator result = rotationCurrent;
+
 	FVector directionCurrent = GetController()->GetControlRotation().Vector();
 	FVector directionTarget(deltaY, deltaX, 0.0f);
 
 	if (directionTarget != FVector::ZeroVector
 		&& directionTarget.SizeSquared() > 0.0f)
 	{
-		FRotator rotationCurrent = GetController()->GetControlRotation();
 		FRotator rotationTarget = directionTarget.Rotation();
-		return FMath::Lerp(rotationCurrent, rotationTarget, 0.1f);
+		result = FMath::Lerp(rotationCurrent, rotationTarget, 0.1f);
 	}
 
-	return FRotator::ZeroRotator;
+	//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, FString("directionCurrent") + directionCurrent.ToString());
+	//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, FString("directionTarget") + directionTarget.ToString());
+
+	return result;
 }
 
 void AMrCharacter::ChargeStart()
@@ -103,7 +109,8 @@ void AMrCharacter::ChargeStart()
 	FVector directionCurrent = GetController()->GetControlRotation().Vector();
 	GetCharacterMovement()->AddImpulse(directionCurrent * m_chargeForce);
 
-	GetWorld()->GetTimerManager().SetTimer(m_chargeTimerHandle, this, &AMrCharacter::ChargeFinish, 1.0f, false);
+	GetWorld()->GetTimerManager().SetTimer(m_chargeTimeHandle, this, &AMrCharacter::ChargeFinish, m_chargeTime, false);
+	GetWorld()->GetTimerManager().SetTimer(m_chargeCooldownHandle, m_chargeCooldown, false);
 }
 
 void AMrCharacter::ChargeFinish()

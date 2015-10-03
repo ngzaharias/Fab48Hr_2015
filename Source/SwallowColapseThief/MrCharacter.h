@@ -46,7 +46,12 @@ protected:
 public:
 	UPROPERTY(EditAnywhere, Category = "Abilities")
 		float m_chargeForce;
+	UPROPERTY(EditAnywhere, Category = "Abilities")
+		float m_chargeTime;
+	UPROPERTY(EditAnywhere, Category = "Abilities")
+		float m_chargeCooldown;
 
 protected:
-	FTimerHandle m_chargeTimerHandle;
+	FTimerHandle m_chargeTimeHandle;
+	FTimerHandle m_chargeCooldownHandle;
 };
