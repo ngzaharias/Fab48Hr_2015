@@ -31,8 +31,22 @@ public:
 	virtual void Direction_X(float value);
 	virtual void Direction_Y(float value);
 
-	virtual float GetRotationYaw(float deltaX, float deltaY);
+	FRotator CalculateRotation(float deltaX, float deltaY);
 
 protected:
-	float m_yaw;
+	
+	void ChargeStart();
+	void ChargeFinish();
+
+public:
+
+protected:
+	FTimerDelegate ChargeFinishedCallback;
+
+public:
+	UPROPERTY(EditAnywhere, Category = "Abilities")
+		float m_chargeForce;
+
+protected:
+	FTimerHandle m_chargeTimerHandle;
 };
