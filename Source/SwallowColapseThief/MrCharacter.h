@@ -40,6 +40,8 @@ public:
 		void FillSack();
 	UFUNCTION(BlueprintImplementableEvent, Category = "Abilities")
 		void EmptySack();
+	UFUNCTION(BlueprintImplementableEvent, Category = "Abilities")
+		void HulkSmash();
 
 protected:
 	

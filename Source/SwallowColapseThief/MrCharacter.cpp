@@ -218,7 +218,7 @@ void AMrCharacter::SwallowStart()
 
 void AMrCharacter::AttackLevel()
 {
-
+	HulkSmash();
 }
 
 void AMrCharacter::ChargeFinish()
