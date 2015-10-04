@@ -42,6 +42,10 @@ public:
 		void EmptySack();
 	UFUNCTION(BlueprintImplementableEvent, Category = "Abilities")
 		void HulkSmash();
+	UFUNCTION(BlueprintImplementableEvent, Category = "Abilities")
+		void PlayerSucking();
+	UFUNCTION(BlueprintImplementableEvent, Category = "Abilities")
+		void PlayerStoppedSucking();
 
 protected:
 	
