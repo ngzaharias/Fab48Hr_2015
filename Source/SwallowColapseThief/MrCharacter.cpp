@@ -86,7 +86,7 @@ void AMrCharacter::ActionSpecial()
 	case PA_SWALLOW:
 		if (m_controlee)
 		{
-			ShootControlee(10000.0f);
+			ShootControlee(9000.0f);
 		}
 		else
 		{
@@ -146,7 +146,7 @@ void AMrCharacter::Movement_X(float value)
 		|| (m_ability == PA_SWALLOW && (m_isChanneling || m_controlee)))
 		return;
 
-	GetCharacterMovement()->AddInputVector(FVector(0, 1, 0) * value);
+	GetCharacterMovement()->AddInputVector(FVector(0, 1, 0) * value * 0.9f);
 }
 
 void AMrCharacter::Movement_Y(float value)
@@ -156,7 +156,7 @@ void AMrCharacter::Movement_Y(float value)
 		|| (m_ability == PA_SWALLOW && (m_isChanneling || m_controlee)))
 		return;
 
-	GetCharacterMovement()->AddInputVector(FVector(1, 0, 0) * value);
+	GetCharacterMovement()->AddInputVector(FVector(1, 0, 0) * value * 0.9f);
 }
 
 void AMrCharacter::Direction_X(float value)
@@ -217,7 +217,7 @@ void AMrCharacter::ChargeStart()
 		
 		characterMovement->StopActiveMovement();
 		characterMovement->AddImpulse(directionCurrent * m_chargeForce, true);
-		characterMovement->MovementMode = EMovementMode::MOVE_Flying;
+		//characterMovement->MovementMode = EMovementMode::MOVE_Flying;
 
 		GetWorld()->GetTimerManager().SetTimer(m_chargeTimeHandle, this, &AMrCharacter::ChargeFinish, m_chargeTime, false);
 		GetWorld()->GetTimerManager().SetTimer(m_chargeCooldownHandle, m_chargeCooldown, false);
@@ -238,7 +238,6 @@ void AMrCharacter::AttackLevel()
 
 void AMrCharacter::ChargeFinish()
 {
-	//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, "ChargeFinish");
 	m_isCharging = false;
 
 	GetWorld()->GetTimerManager().ClearTimer(m_chargeTimeHandle);
@@ -253,11 +252,9 @@ int32 AMrCharacter::GetAbility()
 
 void AMrCharacter::PossessOther(AMrCharacter* other)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, "PossessOther");
 	if (m_controlee || m_controler)
 		return;
 
-	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, "Possess success");
 	m_controlee = other;
 	m_controlee->LoseControl(this);
 

@@ -23,6 +23,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Utility")
 		FColor GetPlayerColour();
 
+	UFUNCTION(BlueprintCallable, Category = "Utility")
+		void StartGame();
+
 public:
 	UPROPERTY(EditAnywhere, Category = "Multiplayer")
 		int8 m_players;

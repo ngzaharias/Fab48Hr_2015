@@ -42,3 +42,8 @@ FColor ASwallowColapseThiefGameMode::GetPlayerColour()
 	//GEngine->AddOnScreenDebugMessage(-1, 1.0f, result, "PlayerColour");
 	return result;
 }
+
+void ASwallowColapseThiefGameMode::StartGame()
+{
+
+}

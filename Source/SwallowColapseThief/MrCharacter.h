@@ -60,8 +60,10 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "Abilities")
 		void ChargeFinish();
 
+public:
 	UFUNCTION(BlueprintCallable, Category = "Abilities")
 		int32 GetAbility();
+protected:
 	UFUNCTION(BlueprintCallable, Category = "Abilities")
 		void PossessOther(AMrCharacter* other);
 
