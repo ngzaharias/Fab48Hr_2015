@@ -45,9 +45,17 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "Abilities")
 		void ChargeFinish();
 
+	UFUNCTION(BlueprintCallable, Category = "Abilities")
+		int32 GetAbility();
+	UFUNCTION(BlueprintCallable, Category = "Abilities")
+		void PossessOther(AMrCharacter* other);
+
 public:
 	UFUNCTION(BlueprintCallable, Category = "Abilities")
 		void SetSpecialAbility(int32 ability);
+
+	void LoseControl(AMrCharacter* controller);
+	void ReclaimControl();
 
 protected:
 	FTimerDelegate ChargeFinishedCallback;
@@ -68,6 +76,9 @@ protected:
 
 	FTimerHandle m_chargeTimeHandle;
 	FTimerHandle m_chargeCooldownHandle;
+
+	AMrCharacter* m_controler;
+	AMrCharacter* m_controlee;
 
 	// If you change this, please update the valules in Powerup_bp too.
 	enum PlayerAbility
