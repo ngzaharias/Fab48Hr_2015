@@ -20,7 +20,13 @@ public:
 
 	virtual void Tick(float DeltaSeconds) override;
 
+	UFUNCTION(BlueprintCallable, Category = "Utility")
+		FColor GetPlayerColour();
+
 public:
 	UPROPERTY(EditAnywhere, Category = "Multiplayer")
 		int8 m_players;
+
+protected:
+	TArray<FColor> m_colours;
 };
