@@ -242,7 +242,7 @@ void AMrCharacter::ChargeFinish()
 
 	GetWorld()->GetTimerManager().ClearTimer(m_chargeTimeHandle);
 
-	GetCharacterMovement()->MovementMode = EMovementMode::MOVE_Walking;
+	//GetCharacterMovement()->MovementMode = EMovementMode::MOVE_Walking;
 }
 
 int32 AMrCharacter::GetAbility()
