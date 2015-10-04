@@ -37,6 +37,7 @@ void AMrCharacter::Tick(float DeltaTime)
 	{
 		FVector moveVec = GetActorLocation() - m_lastPos;
 		m_controlee->SetActorLocation(m_controlee->GetActorLocation() + moveVec);
+		m_lastPos = GetActorLocation();
 	}
 }
 
