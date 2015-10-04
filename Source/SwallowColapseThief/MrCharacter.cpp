@@ -32,6 +32,12 @@ void AMrCharacter::Tick(float DeltaTime)
 	{
 		ChargeTick();
 	}
+	
+	if (m_controlee)
+	{
+		FVector moveVec = GetActorLocation() - m_lastPos;
+		m_controlee->SetActorLocation(m_controlee->GetActorLocation() + moveVec);
+	}
 }
 
 // Called to bind functionality to input
@@ -182,6 +188,7 @@ void AMrCharacter::PossessOther(AMrCharacter* other)
 	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, "Possess success");
 	m_controlee = other;
 	m_controlee->LoseControl(this);
+	m_lastPos = GetActorLocation();
 }
 
 void AMrCharacter::SetSpecialAbility(int32 ability)

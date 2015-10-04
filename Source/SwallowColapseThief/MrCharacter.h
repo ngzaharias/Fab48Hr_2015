@@ -79,6 +79,7 @@ protected:
 
 	AMrCharacter* m_controler;
 	AMrCharacter* m_controlee;
+	FVector m_lastPos;
 
 	// If you change this, please update the valules in Powerup_bp too.
 	enum PlayerAbility
