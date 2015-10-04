@@ -26,6 +26,7 @@ public:
 	virtual void ActionBasic();
 	virtual void ActionSpecial();
 	virtual void ActionSpecialReleased();
+	virtual void MashButtonPessed();
 
 	void ShootControlee(float force);
 

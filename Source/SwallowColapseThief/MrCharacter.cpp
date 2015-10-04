@@ -49,6 +49,7 @@ void AMrCharacter::SetupPlayerInputComponent(class UInputComponent* InputCompone
 	InputComponent->BindAction(TEXT("ActionBasic"), IE_Pressed, this, &AMrCharacter::ActionBasic);
 	InputComponent->BindAction(TEXT("ActionSpecial"), IE_Pressed, this, &AMrCharacter::ActionSpecial);
 	InputComponent->BindAction(TEXT("ActionSpecial"), IE_Released, this, &AMrCharacter::ActionSpecialReleased);
+	InputComponent->BindAction(TEXT("EscapeButton"), IE_Pressed, this, &AMrCharacter::MashButtonPessed);
 	InputComponent->BindAxis(TEXT("Movement_X"), this, &AMrCharacter::Movement_X);
 	InputComponent->BindAxis(TEXT("Movement_Y"), this, &AMrCharacter::Movement_Y);
 	InputComponent->BindAxis(TEXT("Direction_X"), this, &AMrCharacter::Direction_X);
@@ -60,16 +61,6 @@ void AMrCharacter::ActionBasic()
 	if (m_isDead)
 		return;
 
-	if (m_controler && m_controler->GetAbility() == PA_THEIF)
-	{
-		if (--m_escapeCount <= 0)
-		{
-			m_controler->ShootControlee(3000.0f);
-		}
-
-		return;
-	}
-
 	ChargeStart();
 }
 
@@ -77,16 +68,6 @@ void AMrCharacter::ActionSpecial()
 {
 	if (m_isDead)
 		return;
-
-	if (m_controler && m_controler->GetAbility() == PA_THEIF)
-	{
-		if (--m_escapeCount <= 0)
-		{
-			m_controler->ShootControlee(3000.0f);
-		}
-
-		return;
-	}
 
 	m_isChanneling = true;
 	switch (m_ability)
@@ -121,6 +102,17 @@ void AMrCharacter::ActionSpecialReleased()
 {
 	m_isChanneling = false;
 	PlayerStoppedSucking();
+}
+
+void AMrCharacter::MashButtonPessed()
+{
+	if (m_controler && m_controler->GetAbility() == PA_THEIF)
+	{
+		if (--m_escapeCount <= 0)
+		{
+			m_controler->ShootControlee(3000.0f);
+		}
+	}
 }
 
 void AMrCharacter::ShootControlee(float force)
@@ -270,9 +262,9 @@ void AMrCharacter::LoseControl(AMrCharacter* controler)
 	SetActorHiddenInGame(true);
 	SetActorEnableCollision(false);
 	if (controler->GetAbility() == PA_THEIF)
+	{
 		m_escapeCount = 5;
-	else
-		m_escapeCount = 500;
+	}
 }
 
 void AMrCharacter::ReclaimControl()
