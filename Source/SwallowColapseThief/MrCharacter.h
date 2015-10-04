@@ -26,6 +26,7 @@ public:
 	virtual void ActionBasic();
 	virtual void ActionSpecial();
 	virtual void ActionSpecialReleased();
+	virtual void MashButtonPessed();
 
 	void ShootControlee(float force);
 
@@ -42,6 +43,10 @@ public:
 		void EmptySack();
 	UFUNCTION(BlueprintImplementableEvent, Category = "Abilities")
 		void HulkSmash();
+	UFUNCTION(BlueprintImplementableEvent, Category = "Abilities")
+		void PlayerSucking();
+	UFUNCTION(BlueprintImplementableEvent, Category = "Abilities")
+		void PlayerStoppedSucking();
 
 protected:
 	
