@@ -49,11 +49,17 @@ void AMrCharacter::SetupPlayerInputComponent(class UInputComponent* InputCompone
 
 void AMrCharacter::ActionBasic()
 {
+	if (m_isDead)
+		return;
+
 	ChargeStart();
 }
 
 void AMrCharacter::ActionSpecial()
 {
+	if (m_isDead)
+		return;
+
 	m_isChanneling = true;
 	switch (m_ability)
 	{
@@ -76,7 +82,9 @@ void AMrCharacter::ActionSpecialReleased()
 
 void AMrCharacter::Movement_X(float value)
 {
-	if (m_isCharging || (m_ability == PA_SWALLOW && m_isChanneling))
+	if (m_isCharging 
+		|| m_isDead
+		|| (m_ability == PA_SWALLOW && m_isChanneling))
 		return;
 
 	GetCharacterMovement()->AddInputVector(FVector(0, 1, 0) * value);
@@ -84,7 +92,9 @@ void AMrCharacter::Movement_X(float value)
 
 void AMrCharacter::Movement_Y(float value)
 {
-	if (m_isCharging || (m_ability == PA_SWALLOW && m_isChanneling))
+	if (m_isCharging 
+		|| m_isDead
+		|| (m_ability == PA_SWALLOW && m_isChanneling))
 		return;
 
 	GetCharacterMovement()->AddInputVector(FVector(1, 0, 0) * value);
@@ -92,6 +102,9 @@ void AMrCharacter::Movement_Y(float value)
 
 void AMrCharacter::Direction_X(float value)
 {
+	if (m_isDead)
+		return;
+
 	const float deltaY = InputComponent->GetAxisValue(TEXT("Direction_Y"));
 	FRotator rotation = CalculateRotation(value, deltaY);
 	GetController()->SetControlRotation(rotation);
@@ -99,6 +112,9 @@ void AMrCharacter::Direction_X(float value)
 
 void AMrCharacter::Direction_Y(float value)
 {
+	if (m_isDead)
+		return;
+
 	const float deltaX = InputComponent->GetAxisValue(TEXT("Direction_X"));
 	FRotator rotation = CalculateRotation(deltaX, value);
 	GetController()->SetControlRotation(rotation);
@@ -125,7 +141,8 @@ FRotator AMrCharacter::CalculateRotation(float deltaX, float deltaY)
 void AMrCharacter::ChargeStart()
 {
 	// You can't charge while possessing someone
-	if (m_controlee || m_controler)
+	if (m_controlee 
+		|| m_controler)
 		return;
 
 	UCharacterMovementComponent* characterMovement = GetCharacterMovement();
