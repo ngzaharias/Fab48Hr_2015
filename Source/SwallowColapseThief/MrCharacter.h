@@ -27,6 +27,8 @@ public:
 	virtual void ActionSpecial();
 	virtual void ActionSpecialReleased();
 
+	void ShootControlee(float force);
+
 	virtual void Movement_X(float value);
 	virtual void Movement_Y(float value);
 	virtual void Direction_X(float value);
@@ -34,6 +36,10 @@ public:
 
 	FRotator CalculateRotation(float deltaX, float deltaY);
 
+	UFUNCTION(BlueprintImplementableEvent, Category = "Abilities")
+		void FillSack();
+	UFUNCTION(BlueprintImplementableEvent, Category = "Abilities")
+		void EmptySack();
 
 protected:
 	
@@ -80,6 +86,8 @@ protected:
 	AMrCharacter* m_controler;
 	AMrCharacter* m_controlee;
 	FVector m_lastPos;
+
+	int32 m_escapeCount;
 
 	// If you change this, please update the valules in Powerup_bp too.
 	enum PlayerAbility
