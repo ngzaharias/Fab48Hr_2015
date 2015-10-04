@@ -13,6 +13,7 @@ AMrCharacter::AMrCharacter()
 
 	m_controler = 0;
 	m_controlee = 0;
+	m_escapeCount = 0;
 
 	m_ability = PA_NONE;
 }
@@ -31,6 +32,13 @@ void AMrCharacter::Tick(float DeltaTime)
 	if (m_isCharging)
 	{
 		ChargeTick();
+	}
+	
+	if (m_controlee)
+	{
+		//FVector moveVec = GetActorLocation() - m_lastPos;
+		//m_controlee->SetActorLocation(m_controlee->GetActorLocation() + moveVec);
+		//m_lastPos = GetActorLocation();
 	}
 }
 
@@ -52,6 +60,16 @@ void AMrCharacter::ActionBasic()
 	if (m_isDead)
 		return;
 
+	if (m_controler && m_controler->GetAbility() == PA_THEIF)
+	{
+		if (--m_escapeCount <= 0)
+		{
+			m_controler->ShootControlee(3000.0f);
+		}
+
+		return;
+	}
+
 	ChargeStart();
 }
 
@@ -60,6 +78,16 @@ void AMrCharacter::ActionSpecial()
 	if (m_isDead)
 		return;
 
+	if (m_controler && m_controler->GetAbility() == PA_THEIF)
+	{
+		if (--m_escapeCount <= 0)
+		{
+			m_controler->ShootControlee(3000.0f);
+		}
+
+		return;
+	}
+
 	m_isChanneling = true;
 	switch (m_ability)
 	{
@@ -67,7 +95,14 @@ void AMrCharacter::ActionSpecial()
 		SwallowStart();
 		break;
 	case PA_THEIF:
-		ChargeStart();
+		if (m_controlee)
+		{
+			ShootControlee(3000.0f);
+		}
+		else
+		{
+			ChargeStart();
+		}
 		break;
 	case PA_COLLAPSE:
 		AttackLevel();
@@ -78,6 +113,17 @@ void AMrCharacter::ActionSpecial()
 void AMrCharacter::ActionSpecialReleased()
 {
 	m_isChanneling = false;
+}
+
+void AMrCharacter::ShootControlee(float force)
+{
+	FVector shootDir = GetController()->GetControlRotation().Vector();
+	shootDir.Normalize();
+
+	m_controlee->SetActorLocation(GetActorLocation() + (shootDir * 100.0f));
+	m_controlee->GetCharacterMovement()->StopActiveMovement();
+	m_controlee->GetCharacterMovement()->AddImpulse(shootDir * force, true);
+	m_controlee->ReclaimControl();
 }
 
 void AMrCharacter::Movement_X(float value)
@@ -199,6 +245,8 @@ void AMrCharacter::PossessOther(AMrCharacter* other)
 	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, "Possess success");
 	m_controlee = other;
 	m_controlee->LoseControl(this);
+
+	FillSack();
 }
 
 void AMrCharacter::SetSpecialAbility(int32 ability)
@@ -210,6 +258,9 @@ void AMrCharacter::LoseControl(AMrCharacter* controler)
 {
 	m_controler = controler;
 	GetCharacterMovement()->MovementMode = EMovementMode::MOVE_None;
+	SetActorHiddenInGame(true);
+	SetActorEnableCollision(false);
+	m_escapeCount = 5;
 }
 
 void AMrCharacter::ReclaimControl()
@@ -222,11 +273,15 @@ void AMrCharacter::ReclaimControl()
 
 	if (m_controlee)
 	{
+		// move to me
 		m_controlee = 0;
+		EmptySack();
 	}
 
 	if (GetCharacterMovement()->MovementMode == EMovementMode::MOVE_None)
 	{
 		GetCharacterMovement()->MovementMode = EMovementMode::MOVE_Walking;
+		SetActorHiddenInGame(false);
+		SetActorEnableCollision(true);
 	}
 }
