@@ -10,6 +10,11 @@ AMrCharacter::AMrCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 	m_isChanneling = false;
 	m_isCharging = false;
+
+	m_controler = 0;
+	m_controlee = 0;
+
+	m_ability = PA_NONE;
 }
 
 // Called when the game starts or when spawned
@@ -119,14 +124,19 @@ FRotator AMrCharacter::CalculateRotation(float deltaX, float deltaY)
 
 void AMrCharacter::ChargeStart()
 {
+	// You can't charge while possessing someone
+	if (m_controlee || m_controler)
+		return;
+
 	UCharacterMovementComponent* characterMovement = GetCharacterMovement();
 
 	if (GetWorld()->GetTimerManager().GetTimerRemaining(m_chargeCooldownHandle) <= 0.0f)
 	{
 		m_isCharging = true;
 
-		FVector directionCurrent = GetController()->GetControlRotation().Vector(); // we don't want to go where we're facing (maybe we do if we're still?)
-		directionCurrent = GetVelocity();
+		FVector directionCurrent = GetVelocity();
+		if (directionCurrent.SizeSquared() == 0)
+			directionCurrent = GetController()->GetControlRotation().Vector();// only boost where we're facing if we're not moving
 		directionCurrent.Normalize();
 		
 		characterMovement->StopActiveMovement();
@@ -140,7 +150,7 @@ void AMrCharacter::ChargeStart()
 
 void AMrCharacter::SwallowStart()
 {
-	GetCharacterMovement()->AddInputVector(FVector(0, 0, 0));
+	GetCharacterMovement()->StopActiveMovement();
 }
 
 void AMrCharacter::AttackLevel()
@@ -158,7 +168,48 @@ void AMrCharacter::ChargeFinish()
 	GetCharacterMovement()->MovementMode = EMovementMode::MOVE_Walking;
 }
 
+int32 AMrCharacter::GetAbility()
+{
+	return (int32)m_ability;
+}
+
+void AMrCharacter::PossessOther(AMrCharacter* other)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, "PossessOther");
+	if (m_controlee || m_controler)
+		return;
+
+	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, "Possess success");
+	m_controlee = other;
+	m_controlee->LoseControl(this);
+}
+
 void AMrCharacter::SetSpecialAbility(int32 ability)
 {
 	m_ability = (PlayerAbility)ability;
+}
+
+void AMrCharacter::LoseControl(AMrCharacter* controler)
+{
+	m_controler = controler;
+	GetCharacterMovement()->MovementMode = EMovementMode::MOVE_None;
+}
+
+void AMrCharacter::ReclaimControl()
+{
+	if (m_controler)
+	{
+		m_controler->ReclaimControl();
+		m_controler = 0;
+	}
+
+	if (m_controlee)
+	{
+		m_controlee = 0;
+	}
+
+	if (GetCharacterMovement()->MovementMode == EMovementMode::MOVE_None)
+	{
+		GetCharacterMovement()->MovementMode = EMovementMode::MOVE_Walking;
+	}
 }
