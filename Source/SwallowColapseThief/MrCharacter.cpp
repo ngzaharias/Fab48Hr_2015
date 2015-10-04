@@ -92,7 +92,14 @@ void AMrCharacter::ActionSpecial()
 	switch (m_ability)
 	{
 	case PA_SWALLOW:
-		SwallowStart();
+		if (m_controlee)
+		{
+			ShootControlee(10000.0f);
+		}
+		else
+		{
+			SwallowStart();
+		}
 		break;
 	case PA_THEIF:
 		if (m_controlee)
@@ -113,6 +120,7 @@ void AMrCharacter::ActionSpecial()
 void AMrCharacter::ActionSpecialReleased()
 {
 	m_isChanneling = false;
+	PlayerStoppedSucking();
 }
 
 void AMrCharacter::ShootControlee(float force)
@@ -130,7 +138,7 @@ void AMrCharacter::Movement_X(float value)
 {
 	if (m_isCharging 
 		|| m_isDead
-		|| (m_ability == PA_SWALLOW && m_isChanneling))
+		|| (m_ability == PA_SWALLOW && (m_isChanneling || m_controlee)))
 		return;
 
 	GetCharacterMovement()->AddInputVector(FVector(0, 1, 0) * value);
@@ -140,7 +148,7 @@ void AMrCharacter::Movement_Y(float value)
 {
 	if (m_isCharging 
 		|| m_isDead
-		|| (m_ability == PA_SWALLOW && m_isChanneling))
+		|| (m_ability == PA_SWALLOW && (m_isChanneling || m_controlee)))
 		return;
 
 	GetCharacterMovement()->AddInputVector(FVector(1, 0, 0) * value);
@@ -214,6 +222,7 @@ void AMrCharacter::ChargeStart()
 void AMrCharacter::SwallowStart()
 {
 	GetCharacterMovement()->StopActiveMovement();
+	PlayerSucking();
 }
 
 void AMrCharacter::AttackLevel()
@@ -260,7 +269,10 @@ void AMrCharacter::LoseControl(AMrCharacter* controler)
 	GetCharacterMovement()->MovementMode = EMovementMode::MOVE_None;
 	SetActorHiddenInGame(true);
 	SetActorEnableCollision(false);
-	m_escapeCount = 5;
+	if (controler->GetAbility() == PA_THEIF)
+		m_escapeCount = 5;
+	else
+		m_escapeCount = 500;
 }
 
 void AMrCharacter::ReclaimControl()
