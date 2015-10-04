@@ -39,6 +39,6 @@ FColor ASwallowColapseThiefGameMode::GetPlayerColour()
 		m_colours.RemoveAt(0);
 	}
 
-	GEngine->AddOnScreenDebugMessage(-1, 1.0f, result, "PlayerColour");
+	//GEngine->AddOnScreenDebugMessage(-1, 1.0f, result, "PlayerColour");
 	return result;
 }
