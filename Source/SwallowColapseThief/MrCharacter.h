@@ -76,6 +76,9 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Abilities")
 		float m_chargeCooldown;
 
+	UPROPERTY(BlueprintReadWrite, Category = "Dead")
+		bool m_isDead;
+
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Abilities")
 		bool m_isCharging;
