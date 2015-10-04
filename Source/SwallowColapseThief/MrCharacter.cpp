@@ -40,6 +40,17 @@ void AMrCharacter::Tick(float DeltaTime)
 		//m_controlee->SetActorLocation(m_controlee->GetActorLocation() + moveVec);
 		//m_lastPos = GetActorLocation();
 	}
+
+	const float rotX = InputComponent->GetAxisValue(TEXT("Direction_X"));
+	const float rotY = InputComponent->GetAxisValue(TEXT("Direction_Y"));
+	if (rotX == 0.0f
+		&& rotY == 0.0f)
+	{
+		const float moveX = InputComponent->GetAxisValue(TEXT("Movement_X"));
+		const float moveY = InputComponent->GetAxisValue(TEXT("Movement_Y"));
+		FRotator rotation = CalculateRotation(moveX, moveY);
+		GetController()->SetControlRotation(rotation);
+	}
 }
 
 // Called to bind functionality to input
