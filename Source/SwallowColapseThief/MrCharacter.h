@@ -47,6 +47,8 @@ public:
 		void PlayerSucking();
 	UFUNCTION(BlueprintImplementableEvent, Category = "Abilities")
 		void PlayerStoppedSucking();
+	UFUNCTION(BlueprintImplementableEvent, Category = "Abilities")
+		void RevertToVanilla();
 
 protected:
 	

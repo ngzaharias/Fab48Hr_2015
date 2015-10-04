@@ -124,6 +124,8 @@ void AMrCharacter::ShootControlee(float force)
 	m_controlee->GetCharacterMovement()->StopActiveMovement();
 	m_controlee->GetCharacterMovement()->AddImpulse(shootDir * force, true);
 	m_controlee->ReclaimControl();
+
+	RevertToVanilla();
 }
 
 void AMrCharacter::Movement_X(float value)
@@ -220,6 +222,7 @@ void AMrCharacter::SwallowStart()
 void AMrCharacter::AttackLevel()
 {
 	HulkSmash();
+	RevertToVanilla();
 }
 
 void AMrCharacter::ChargeFinish()
